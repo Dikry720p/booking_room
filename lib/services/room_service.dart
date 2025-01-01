@@ -42,40 +42,78 @@ class RoomService {
 
   Future<RoomModel> createRoom(String token, RoomModel room) async {
     try {
+      final requestBody = {
+        'name': room.name,
+        'categoryId': room.categoryId,
+        'price': room.price,
+        'capacity': room.capacity,
+        'description': room.description,
+      };
+
+      print('Creating new room');
+      print('Request body: ${jsonEncode(requestBody)}');
+
       final response = await http.post(
         Uri.parse('$baseUrl/rooms'),
         headers: {
           'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode(room.toJson()),
+        body: jsonEncode(requestBody),
       );
 
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
       if (response.statusCode == 201) {
-        return RoomModel.fromJson(jsonDecode(response.body)['data']);
+        final jsonResponse = jsonDecode(response.body);
+        return RoomModel.fromJson(jsonResponse);
       }
-      throw Exception('Gagal menambah ruangan');
+
+      throw Exception(
+          'Gagal membuat ruangan: ${response.statusCode} - ${response.body}');
     } catch (e) {
-      throw Exception('Gagal menambah ruangan: $e');
+      print('Error creating room: $e');
+      throw Exception('Gagal membuat ruangan: $e');
     }
   }
 
   Future<RoomModel> updateRoom(String token, int id, RoomModel room) async {
     try {
+      final requestBody = {
+        'name': room.name,
+        'categoryId': room.categoryId.toString(),
+        'price': room.price.toString(),
+        'capacity': room.capacity.toString(),
+        'description': room.description,
+      };
+
+      print('Updating room with ID: $id');
+      print('Request body: ${jsonEncode(requestBody)}');
+
       final response = await http.put(
         Uri.parse('$baseUrl/rooms/$id'),
         headers: {
           'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode(room.toJson()),
+        body: jsonEncode(requestBody),
       );
 
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
       if (response.statusCode == 200) {
-        return RoomModel.fromJson(jsonDecode(response.body)['data']);
+        final jsonResponse = jsonDecode(response.body);
+        return RoomModel.fromJson(jsonResponse);
       }
-      throw Exception('Gagal mengupdate ruangan');
+
+      throw Exception(
+          'Gagal mengupdate ruangan: ${response.statusCode} - ${response.body}');
     } catch (e) {
+      print('Error updating room: $e');
       throw Exception('Gagal mengupdate ruangan: $e');
     }
   }

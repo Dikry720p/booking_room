@@ -53,7 +53,7 @@ class RoomController extends GetxController {
       Get.back();
       Get.snackbar('Sukses', 'Ruangan berhasil ditambahkan');
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      Get.snackbar('Error', 'Gagal menambah ruangan: $e');
     }
   }
 
@@ -68,9 +68,9 @@ class RoomController extends GetxController {
       await _roomService.updateRoom(token, id, room);
       await loadRooms();
       Get.back();
-      Get.snackbar('Sukses', 'Ruangan berhasil diupdate');
+      Get.snackbar('Sukses', 'Ruangan berhasil diperbarui');
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      Get.snackbar('Error', 'Gagal memperbarui ruangan: $e');
     }
   }
 
@@ -86,7 +86,7 @@ class RoomController extends GetxController {
       await loadRooms();
       Get.snackbar('Sukses', 'Ruangan berhasil dihapus');
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      Get.snackbar('Error', 'Gagal menghapus ruangan: $e');
     }
   }
 }
