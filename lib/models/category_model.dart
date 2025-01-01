@@ -25,4 +25,14 @@ class CategoryModel {
       updatedAt: json['updated_at'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+    };
+  }
 }

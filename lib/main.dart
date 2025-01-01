@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'bindings/auth_binding.dart';
+import 'bindings/category_binding.dart';
 import 'bindings/room_binding.dart';
 import 'pages/login_page.dart';
 import 'pages/register_page.dart';
-import 'pages/main_page.dart';
+import 'pages/home_page.dart';
+import 'pages/room_page.dart';
 import 'pages/room_detail_page.dart';
+import 'pages/main_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +21,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Booking Room App',
-      initialBinding: AuthBinding(),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
       initialRoute: '/login',
       getPages: [
         GetPage(
@@ -32,8 +38,13 @@ class MyApp extends StatelessWidget {
           binding: AuthBinding(),
         ),
         GetPage(
-          name: '/main',
-          page: () => const MainPage(),
+          name: '/home',
+          page: () => const HomePage(),
+          binding: CategoryBinding(),
+        ),
+        GetPage(
+          name: '/rooms',
+          page: () => const RoomPage(),
           binding: RoomBinding(),
         ),
         GetPage(
@@ -41,7 +52,13 @@ class MyApp extends StatelessWidget {
           page: () => const RoomDetailPage(),
           binding: RoomBinding(),
         ),
+        GetPage(
+          name: '/main',
+          page: () => const MainPage(),
+          binding: RoomBinding(),
+        ),
       ],
+      debugShowCheckedModeBanner: false,
     );
   }
 }

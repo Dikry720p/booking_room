@@ -1,31 +1,7 @@
-class CategoryModel {
-  final int id;
-  final String name;
-  final String? description;
-  final String createdAt;
-  final String updatedAt;
-
-  CategoryModel({
-    required this.id,
-    required this.name,
-    this.description,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory CategoryModel.fromJson(Map<String, dynamic> json) {
-    return CategoryModel(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-    );
-  }
-}
+import 'category_model.dart';
 
 class RoomModel {
-  final int? id;
+  final int id;
   final String name;
   final int categoryId;
   final int price;
@@ -38,7 +14,7 @@ class RoomModel {
   final CategoryModel? category;
 
   RoomModel({
-    this.id,
+    required this.id,
     required this.name,
     required this.categoryId,
     required this.price,
@@ -53,16 +29,16 @@ class RoomModel {
 
   factory RoomModel.fromJson(Map<String, dynamic> json) {
     return RoomModel(
-      id: json['id'],
-      name: json['name'],
-      categoryId: json['categoryId'],
-      price: json['price'],
-      capacity: json['capacity'],
-      description: json['description'],
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      categoryId: json['categoryId'] ?? 0,
+      price: json['price'] ?? 0,
+      capacity: json['capacity'] ?? 0,
+      description: json['description'] ?? '',
       image: json['image'],
-      status: json['status'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
+      status: json['status'] ?? 'draft',
+      createdAt: json['created_at'] ?? '',
+      updatedAt: json['updated_at'] ?? '',
       category: json['category'] != null
           ? CategoryModel.fromJson(json['category'])
           : null,
@@ -71,11 +47,17 @@ class RoomModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'name': name,
-      'categoryId': categoryId,
+      'category_id': categoryId,
       'price': price,
       'capacity': capacity,
       'description': description,
+      'image': image,
+      'status': status,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+      'category': category?.toJson(),
     };
   }
 }

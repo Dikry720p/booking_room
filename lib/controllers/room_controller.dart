@@ -1,17 +1,21 @@
 import 'package:get/get.dart';
+import '../models/room_model.dart';
 import '../services/room_service.dart';
 import '../services/token_service.dart';
-import '../models/room_model.dart';
 
 class RoomController extends GetxController {
   final RoomService _roomService = RoomService();
   final rooms = <RoomModel>[].obs;
   final isLoading = false.obs;
+  final categoryId = 0.obs;
 
   @override
   void onInit() {
-    loadRooms();
     super.onInit();
+    if (Get.arguments != null) {
+      categoryId.value = Get.arguments as int;
+      loadRooms();
+    }
   }
 
   Future<void> loadRooms() async {
@@ -23,10 +27,14 @@ class RoomController extends GetxController {
         return;
       }
 
-      final roomList = await _roomService.getRooms(token);
-      rooms.value = roomList;
+      final result = await _roomService.getRooms(token, categoryId.value);
+      rooms.value = result;
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      Get.snackbar(
+        'Error',
+        'Gagal memuat ruangan: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } finally {
       isLoading.value = false;
     }

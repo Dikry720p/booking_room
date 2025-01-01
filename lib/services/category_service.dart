@@ -11,16 +11,20 @@ class CategoryService {
         Uri.parse('$baseUrl/categories'),
         headers: {
           'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
       );
 
       if (response.statusCode == 200) {
-        List<dynamic> data = jsonDecode(response.body)['data'];
-        return data.map((json) => CategoryModel.fromJson(json)).toList();
+        final List<dynamic> responseData = jsonDecode(response.body);
+        return responseData
+            .map((item) => CategoryModel.fromJson(item))
+            .toList();
       }
-      throw Exception('Gagal mengambil data kategori: ${response.body}');
+
+      throw Exception('Gagal mengambil data kategori: ${response.statusCode}');
     } catch (e) {
+      print('Error getting categories: $e');
       throw Exception('Gagal mengambil data kategori: $e');
     }
   }

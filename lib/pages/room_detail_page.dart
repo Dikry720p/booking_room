@@ -1,3 +1,4 @@
+import 'package:booking_room/models/room_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/room_detail_controller.dart';
@@ -7,8 +8,7 @@ class RoomDetailPage extends GetView<RoomDetailController> {
 
   @override
   Widget build(BuildContext context) {
-    final roomId = Get.arguments as int;
-    controller.loadRoomDetail(roomId);
+    print('Building RoomDetailPage with arguments: ${Get.arguments}');
 
     return Scaffold(
       appBar: AppBar(
@@ -29,23 +29,6 @@ class RoomDetailPage extends GetView<RoomDetailController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (room.image != null)
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    room.image!,
-                    width: double.infinity,
-                    height: 200,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      width: double.infinity,
-                      height: 200,
-                      color: Colors.grey[300],
-                      child: const Icon(Icons.meeting_room, size: 50),
-                    ),
-                  ),
-                ),
-              const SizedBox(height: 16),
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
@@ -59,15 +42,25 @@ class RoomDetailPage extends GetView<RoomDetailController> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      const SizedBox(height: 16),
+                      _buildInfoRow('Kategori',
+                          room.category?.name ?? 'Tidak ada kategori'),
+                      _buildInfoRow('Kapasitas', '${room.capacity} orang'),
+                      _buildInfoRow('Harga', 'Rp ${room.price}'),
+                      _buildInfoRow('Status', room.status),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Deskripsi:',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         room.description,
                         style: const TextStyle(fontSize: 16),
                       ),
-                      const Divider(height: 32),
-                      _buildInfoRow('Kategori ID', '${room.categoryId}'),
-                      _buildInfoRow('Kapasitas', '${room.capacity} orang'),
-                      _buildInfoRow('Harga', 'Rp ${room.price}'),
                     ],
                   ),
                 ),

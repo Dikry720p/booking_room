@@ -11,16 +11,16 @@ class RoomDetailController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Cek apakah ada arguments dan pastikan tipe datanya int
+    print('RoomDetailController onInit with arguments: ${Get.arguments}');
     if (Get.arguments != null) {
       final roomId = Get.arguments as int;
+      print('Loading room detail for ID: $roomId');
       loadRoomDetail(roomId);
     }
   }
 
   @override
   void onClose() {
-    // Reset data saat controller ditutup
     room.value = null;
     super.onClose();
   }
@@ -34,12 +34,15 @@ class RoomDetailController extends GetxController {
         return;
       }
 
+      print('Fetching room detail with ID: $id');
       final roomDetail = await _roomService.getDetailRoom(token, id);
+      print('Received room detail: ${roomDetail.toJson()}');
       room.value = roomDetail;
     } catch (e) {
+      print('Error loading room detail: $e');
       Get.snackbar(
         'Error',
-        e.toString(),
+        'Gagal memuat detail ruangan: $e',
         snackPosition: SnackPosition.BOTTOM,
       );
     } finally {
