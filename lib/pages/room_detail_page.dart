@@ -65,10 +65,96 @@ class RoomDetailPage extends GetView<RoomDetailController> {
                   ),
                 ),
               ),
+              const SizedBox(height: 16),
+              Text(
+                'Status: ${room.status}',
+                style: TextStyle(
+                  color: room.status == 'available' ? Colors.green : Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              if (room.status == 'available') ...[
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => _showBookingDialog(context),
+                  child: const Text('Booking Ruangan'),
+                ),
+              ],
+              const SizedBox(height: 24),
+              const Text(
+                'Jadwal Booking:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Obx(() {
+                if (controller.bookings.isEmpty) {
+                  return const Text('Belum ada booking');
+                }
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.bookings.length,
+                  itemBuilder: (context, index) {
+                    final booking = controller.bookings[index];
+                    return Card(
+                      child: ListTile(
+                        title:
+                            Text('${booking.startTime} - ${booking.endTime}'),
+                        subtitle: Text('Status: ${booking.status}'),
+                      ),
+                    );
+                  },
+                );
+              }),
             ],
           ),
         );
       }),
+    );
+  }
+
+  void _showBookingDialog(BuildContext context) {
+    final startTimeController = TextEditingController();
+    final endTimeController = TextEditingController();
+
+    Get.dialog(
+      AlertDialog(
+        title: const Text('Booking Ruangan'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              controller: startTimeController,
+              decoration: const InputDecoration(
+                labelText: 'Waktu Mulai (YYYY-MM-DD HH:mm)',
+              ),
+            ),
+            const SizedBox(height: 8),
+            TextFormField(
+              controller: endTimeController,
+              decoration: const InputDecoration(
+                labelText: 'Waktu Selesai (YYYY-MM-DD HH:mm)',
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('Batal'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              controller.createBooking(
+                startTimeController.text,
+                endTimeController.text,
+              );
+              Get.back();
+            },
+            child: const Text('Booking'),
+          ),
+        ],
+      ),
     );
   }
 

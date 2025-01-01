@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'bindings/auth_binding.dart';
 import 'bindings/category_binding.dart';
 import 'bindings/room_binding.dart';
+import 'bindings/room_detail_binding.dart';
 import 'pages/login_page.dart';
 import 'pages/register_page.dart';
 import 'pages/home_page.dart';
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/room-detail',
           page: () => const RoomDetailPage(),
-          binding: RoomBinding(),
+          binding: RoomDetailBinding(),
         ),
         GetPage(
           name: '/main',

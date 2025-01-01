@@ -136,4 +136,31 @@ class RoomService {
       throw Exception('Gagal mengambil detail ruangan: $e');
     }
   }
+
+  Future<RoomModel> getRoomDetail(String token, int roomId) async {
+    try {
+      print('Fetching room detail for ID: $roomId');
+      final response = await http.get(
+        Uri.parse('$baseUrl/rooms/$roomId'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        // API mengembalikan data langsung, bukan dalam wrapper 'data'
+        return RoomModel.fromJson(jsonResponse);
+      }
+
+      throw Exception('Gagal mengambil detail ruangan: ${response.statusCode}');
+    } catch (e) {
+      print('Error getting room detail: $e');
+      throw Exception('Gagal mengambil detail ruangan: $e');
+    }
+  }
 }
