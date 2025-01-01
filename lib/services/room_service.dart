@@ -80,4 +80,37 @@ class RoomService {
       throw Exception('Gagal menghapus ruangan: $e');
     }
   }
+
+  Future<RoomModel> getDetailRoom(String token, int id) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/rooms/$id'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      print('Detail Response Status: ${response.statusCode}');
+      print('Detail Response Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        // Cek apakah data ada dalam response
+        if (responseData['data'] != null) {
+          return RoomModel.fromJson(responseData['data']);
+        } else if (responseData != null) {
+          // Jika data langsung ada di root response
+          return RoomModel.fromJson(responseData);
+        }
+
+        throw Exception('Data ruangan tidak ditemukan');
+      }
+      throw Exception('Gagal mengambil detail ruangan: ${response.statusCode}');
+    } catch (e) {
+      print('Error detail room: $e');
+      throw Exception('Gagal mengambil detail ruangan: $e');
+    }
+  }
 }

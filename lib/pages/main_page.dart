@@ -1,51 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controllers/auth_controller.dart';
 import 'home_page.dart';
 import 'room_page.dart';
 
-class MainPage extends StatefulWidget {
+class MainPage extends GetView<AuthController> {
   const MainPage({Key? key}) : super(key: key);
 
   @override
-  State<MainPage> createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  int _currentIndex = 0;
-
-  final List<Widget> _pages = [
-    const HomePage(),
-    const RoomPage(),
-    const Center(child: Text('Search')), // TODO: Implement Search page
-    const Center(child: Text('Booking')), // TODO: Implement Booking page
-  ];
-
-  @override
   Widget build(BuildContext context) {
+    final _pageController = PageController();
+    final _currentIndex = 0.obs;
+
+    final _pages = [
+      const HomePage(),
+      const RoomPage(),
+      const Center(child: Text('Search')), // TODO: Implement Search page
+      const Center(child: Text('Booking')), // TODO: Implement Booking page
+    ];
+
     return Scaffold(
-      body: _pages[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.meeting_room),
-            label: 'Room',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book_online),
-            label: 'Booking',
-          ),
-        ],
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) => _currentIndex.value = index,
+        children: _pages,
       ),
+      bottomNavigationBar: Obx(() => BottomNavigationBar(
+            currentIndex: _currentIndex.value,
+            onTap: (index) {
+              _currentIndex.value = index;
+              _pageController.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            },
+            type: BottomNavigationBarType.fixed,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.meeting_room),
+                label: 'Room',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                label: 'Search',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.book_online),
+                label: 'Booking',
+              ),
+            ],
+          )),
     );
   }
 }
