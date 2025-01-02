@@ -10,6 +10,8 @@ import 'pages/home_page.dart';
 import 'pages/room_page.dart';
 import 'pages/room_detail_page.dart';
 import 'pages/main_page.dart';
+import 'pages/booking_page.dart';
+import 'bindings/booking_binding.dart';
 
 void main() {
   runApp(const MyApp());
@@ -57,6 +59,11 @@ class MyApp extends StatelessWidget {
           name: '/main',
           page: () => const MainPage(),
           binding: RoomBinding(),
+        ),
+        GetPage(
+          name: '/booking',
+          page: () => const BookingPage(),
+          binding: BookingBinding(),
         ),
       ],
       debugShowCheckedModeBanner: false,

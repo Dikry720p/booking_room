@@ -201,4 +201,30 @@ class RoomService {
       throw Exception('Gagal mengambil detail ruangan: $e');
     }
   }
+
+  Future<List<RoomModel>> getAllRooms(String token) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/rooms'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+        final List<dynamic> roomsData = jsonResponse['data'];
+        return roomsData.map((item) => RoomModel.fromJson(item)).toList();
+      }
+
+      throw Exception('Gagal mengambil data ruangan: ${response.statusCode}');
+    } catch (e) {
+      print('Error getting rooms: $e');
+      throw Exception('Gagal mengambil data ruangan: $e');
+    }
+  }
 }

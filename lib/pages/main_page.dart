@@ -1,5 +1,7 @@
+import 'package:booking_room/pages/booking_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../bindings/booking_binding.dart';
 import '../controllers/auth_controller.dart';
 import 'home_page.dart';
 import 'room_page.dart';
@@ -9,6 +11,7 @@ class MainPage extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
+    BookingBinding().dependencies();
     final _pageController = PageController();
     final _currentIndex = 0.obs;
 
@@ -16,7 +19,7 @@ class MainPage extends GetView<AuthController> {
       const HomePage(),
       const RoomPage(),
       const Center(child: Text('Search')), // TODO: Implement Search page
-      const Center(child: Text('Booking')), // TODO: Implement Booking page
+      const BookingPage(), // TODO: Implement Booking page
     ];
 
     return Scaffold(
